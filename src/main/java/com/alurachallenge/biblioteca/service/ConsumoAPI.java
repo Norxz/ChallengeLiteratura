@@ -20,6 +20,7 @@ public class ConsumoAPI {
             throw new RuntimeException(e);
         }
         String json = response.body();
+        System.out.println ("Respuesta de la API: "+json);
         return json;
     }
 }

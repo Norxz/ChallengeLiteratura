@@ -11,31 +11,25 @@ public class Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(unique = true)
     private String titulo;
-    
-    @Column(name = "idiomas")
-    private String idiomas;
-    
-    private Integer numeroDeDescargas;
-    
     @ManyToOne
+    @JoinColumn(name = "autor_id")
     private Autor autor;
-    
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-    @JoinTable(name = "libro_autor",
-            joinColumns = @JoinColumn(name = "libro_id"),
-            inverseJoinColumns = @JoinColumn(name = "autor_id"))
-    private List<Autor> autores = new ArrayList<> ();
-    
+    private String idioma;
+    @Column(name = "numero_de_descargas")
+    private Double numeroDeDescargas;
+    private List<String> subjects;
+    private List<String> bookshelves;
     public Libro () {
     }
     
-    public Libro (String titulo, String idiomas, Integer numeroDeDescargas) {
-        this.titulo = titulo;
-        this.idiomas = idiomas;
-        this.numeroDeDescargas = numeroDeDescargas;
+    public Libro(DatosLibro datosLibro, Autor autor){
+        this.titulo = datosLibro.titulo ();
+        this.autor = autor;
+        this.idioma = datosLibro.idiomas().get(0);
+        this.numeroDeDescargas=datosLibro.numeroDeDescargas ();
+        this.subjects = datosLibro.subjects();
+        this.bookshelves = datosLibro.bookshelves();
     }
     
     public Long getId () {
@@ -54,28 +48,45 @@ public class Libro {
         this.titulo = titulo;
     }
     
-    public String getIdiomas () {
-        return idiomas;
+    public Autor getAutor () {
+        return autor;
     }
     
-    public void setIdiomas (String idiomas) {
-        this.idiomas = idiomas;
+    public void setAutor (Autor autor) {
+        this.autor = autor;
     }
     
-    public Integer getNumeroDeDescargas () {
+    public String getIdioma () {
+        return idioma;
+    }
+    
+    public void setIdioma (String idioma) {
+        this.idioma = idioma;
+    }
+    
+    
+    public Double getNumeroDeDescargas () {
         return numeroDeDescargas;
     }
     
-    public void setNumeroDeDescargas (Integer numeroDeDescargas) {
+    public void setNumeroDeDescargas (Double numeroDeDescargas) {
         this.numeroDeDescargas = numeroDeDescargas;
     }
     
-    public List<Autor> getAutores () {
-        return autores;
+    public List<String> getSubjects () {
+        return subjects;
     }
     
-    public void setAutores (List<Autor> autores) {
-        this.autores = autores;
+    public void setSubjects (List<String> subjects) {
+        this.subjects = subjects;
+    }
+    
+    public List<String> getBookshelves () {
+        return bookshelves;
+    }
+    
+    public void setBookshelves (List<String> bookshelves) {
+        this.bookshelves = bookshelves;
     }
     
     @Override
@@ -83,9 +94,11 @@ public class Libro {
         return "Libro{" +
                        "id=" + id +
                        ", titulo='" + titulo + '\'' +
-                       ", idiomas='" + idiomas + '\'' +
+                       ", autor=" + autor +
+                       ", idioma='" + idioma + '\'' +
                        ", numeroDeDescargas=" + numeroDeDescargas +
-                       ", autores=" + autores +
+                       ", subjects=" + subjects +
+                       ", bookshelves=" + bookshelves +
                        '}';
     }
 }

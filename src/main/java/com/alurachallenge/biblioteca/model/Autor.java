@@ -13,11 +13,17 @@ public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
     private String nombre;
+    
+    @Column(name = "fechaNacimiento")
     private String fechaNacimiento;
+    
+    @Column(name = "fechaFallecimiento")
     private  String fechaFallecimiento;
     
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Libro> libros;
+
     public Autor () {
     
     }
@@ -26,6 +32,12 @@ public class Autor {
         this.nombre = nombre;
         this.fechaNacimiento = fechaNacimiento;
         this.fechaFallecimiento = fechaFallecimiento;
+    }
+    
+    public Autor (DatosAutor datosAutor) {
+        this.nombre = datosAutor.nombre();
+        this.fechaNacimiento = datosAutor.fechaNacimiento ();
+        this.fechaFallecimiento = datosAutor.fechaFallecimiento();
     }
     
     public Long getId () {
@@ -59,14 +71,13 @@ public class Autor {
     public void setFechaFallecimiento (String fechaFallecimiento) {
         this.fechaFallecimiento = fechaFallecimiento;
     }
-
-    @Override
-    public String toString () {
-        return "Autor{" +
-                       "id=" + id +
-                       ", nombre='" + nombre + '\'' +
-                       ", fechaNacimiento='" + fechaNacimiento + '\'' +
-                       ", fechaFallecimiento='" + fechaFallecimiento + '\'' +
-                       '}';
+    
+    public List<Libro> getLibros () {
+        return libros;
     }
+    
+    public void setLibros (List<Libro> libros) {
+        this.libros = libros;
+    }
+    
 }
